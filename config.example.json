@@ -1,0 +1,10 @@
+{
+    "port": ":8080",
+    "secret_key": "Secret Key for JWT Token",
+    "mongo": {
+        "host": "",
+        "db": "kafito",
+        "user": "",
+        "password": ""
+    }
+}
