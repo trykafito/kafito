@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -36,12 +35,4 @@ func Connect(host, db, user, password string) error {
 	C = client.Database(db)
 
 	return nil
-}
-
-func Bson(d interface{}) bson.M {
-	val, _ := bson.Marshal(d)
-	data := new(bson.M)
-	bson.Unmarshal(val, data)
-
-	return *data
 }

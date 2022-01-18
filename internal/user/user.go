@@ -72,12 +72,12 @@ func (u *User) Insert() error {
 	u.ID = primitive.NewObjectID()
 	u.CreatedAt = time.Now()
 
-	_, err := collection().InsertOne(context.Background(), database.Bson(u))
+	_, err := collection().InsertOne(context.Background(), u)
 	return err
 }
 
 func (u *User) Update() error {
-	_, err := collection().UpdateOne(context.Background(), bson.M{"_id": u.ID}, bson.M{"$set": database.Bson(u)})
+	_, err := collection().UpdateOne(context.Background(), bson.M{"_id": u.ID}, bson.M{"$set": u})
 	return err
 }
 
