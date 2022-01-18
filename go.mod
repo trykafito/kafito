@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/jeyem/passwd v0.0.0-20200706085226-43b38af7a8e5
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/sirupsen/logrus v1.8.1
 	github.com/ttacon/libphonenumber v1.2.1

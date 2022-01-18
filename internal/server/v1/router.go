@@ -18,4 +18,5 @@ func Register(e *echo.Echo, secretKey string) {
 
 	authGroup := v1.Group("/auth")
 	authGroup.POST("/register", register)
+	authGroup.POST("/login", login)
 }

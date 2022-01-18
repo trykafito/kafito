@@ -3,6 +3,7 @@ package v1
 import (
 	"time"
 
+	"github.com/jeyem/passwd"
 	"github.com/labstack/echo"
 	"github.com/trykafito/kafito/internal/user"
 	"github.com/trykafito/kafito/pkg/jwt"
@@ -27,7 +28,7 @@ func register(ctx echo.Context) error {
 
 	u := &user.User{
 		Phone:    phone,
-		Password: form.Password,
+		Password: passwd.Make(form.Password),
 	}
 
 	if err := u.Save(); err != nil {
@@ -41,6 +42,34 @@ func register(ctx echo.Context) error {
 
 	return ctx.JSON(200, echo.Map{
 		"message": "successfully registered",
+		"token":   t,
+		"user":    u,
+	})
+}
+
+func login(ctx echo.Context) error {
+	form := new(authForm)
+	if err := ctx.Bind(form); err != nil {
+		return ctx.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	phone, err := user.ParsePhoneNumber(form.Phone, form.Region)
+	if err != nil {
+		return ctx.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	u, err := user.Auth(phone, form.Password)
+	if err != nil {
+		return ctx.JSON(500, echo.Map{"error": err.Error()})
+	}
+
+	t, err := jwt.Create(SecretKey, u.ID.Hex(), time.Now().Add(expireDuration))
+	if err != nil {
+		return ctx.JSON(500, echo.Map{"error": err.Error()})
+	}
+
+	return ctx.JSON(200, echo.Map{
+		"message": "login successfully",
 		"token":   t,
 		"user":    u,
 	})
