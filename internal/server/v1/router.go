@@ -21,5 +21,8 @@ func Register(e *echo.Echo, sk string) {
 	authGroup.POST("/register", register)
 	authGroup.POST("/login", login)
 
-	v1.Group("/", middleware.JWT(SecretKey), setUser)
+	r := v1.Group("/", middleware.JWT(SecretKey), setUser)
+
+	currentUserGroup := r.Group("current-user")
+	currentUserGroup.GET("", getCurrentUser)
 }
