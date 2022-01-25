@@ -3,11 +3,10 @@ package v1
 import (
 	"github.com/labstack/echo"
 	"github.com/trykafito/kafito/internal/user"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
-func userToJSON(u user.User) bson.M {
-	return bson.M{
+func userToJSON(u user.User) M {
+	return M{
 		"id":         u.ID.Hex(),
 		"name":       u.Name,
 		"phone":      u.Phone,

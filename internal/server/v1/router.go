@@ -12,6 +12,8 @@ var (
 	expireDuration = time.Hour * 336
 )
 
+type M map[string]interface{}
+
 func Register(e *echo.Echo, sk string) {
 	SecretKey = []byte(sk)
 
@@ -25,4 +27,7 @@ func Register(e *echo.Echo, sk string) {
 
 	currentUserGroup := r.Group("current-user")
 	currentUserGroup.GET("", getCurrentUser)
+
+	productGroup := r.Group("products")
+	productGroup.POST("", addProduct)
 }
