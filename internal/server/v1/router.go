@@ -30,4 +30,5 @@ func Register(e *echo.Echo, sk string) {
 
 	productGroup := r.Group("products")
 	productGroup.POST("", addProduct)
+	productGroup.PUT("/:id", editProduct)
 }

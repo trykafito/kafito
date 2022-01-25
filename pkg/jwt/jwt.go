@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -26,10 +25,7 @@ func Parse(secretKey []byte, token string) (*jwt.Token, error) {
 }
 
 func ParseFromRequest(secretKey []byte, req *http.Request) (*jwt.Token, error) {
-	fmt.Println(req.Header.Get("Authorization"))
-	tokenStr := strings.Replace(req.Header.Get("Authorization"), " ", "", -1)
-	tokenStr = strings.Replace(tokenStr, "Bearer", "", -1)
-	fmt.Println(tokenStr)
+	tokenStr := strings.ReplaceAll(req.Header.Get("Authorization"), "Bearer ", "")
 
 	return Parse(secretKey, tokenStr)
 }
