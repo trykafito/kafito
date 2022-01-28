@@ -87,3 +87,19 @@ func editPost(ctx echo.Context) error {
 		"post":    postToJSON(*p),
 	})
 }
+
+func getPost(ctx echo.Context) error {
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	p, err := post.FindOne(bson.M{"_id": id})
+	if err != nil {
+		return ctx.JSON(404, echo.Map{"error": err.Error()})
+	}
+
+	return ctx.JSON(200, echo.Map{
+		"post": postToJSON(*p),
+	})
+}

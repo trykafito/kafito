@@ -34,5 +34,6 @@ func Register(e *echo.Echo, sk string) {
 
 	postGroup := r.Group("posts")
 	postGroup.POST("", addPost)
+	postGroup.GET("/:id", getPost)
 	postGroup.PUT("/:id", editPost)
 }
