@@ -95,3 +95,19 @@ func editProduct(ctx echo.Context) error {
 		"product": productToJSON(*p),
 	})
 }
+
+func getProduct(ctx echo.Context) error {
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	p, err := product.FindOne(bson.M{"_id": id})
+	if err != nil {
+		return ctx.JSON(404, echo.Map{"error": err.Error()})
+	}
+
+	return ctx.JSON(200, echo.Map{
+		"product": productToJSON(*p),
+	})
+}
