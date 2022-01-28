@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/trykafito/kafito/internal/post"
 	"github.com/trykafito/kafito/internal/user"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -48,6 +49,41 @@ func addPost(ctx echo.Context) error {
 
 	return ctx.JSON(200, echo.Map{
 		"message": "post created successfully",
+		"post":    postToJSON(*p),
+	})
+}
+
+func editPost(ctx echo.Context) error {
+	filter := bson.M{}
+
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(404, echo.Map{"error": err.Error()})
+	}
+
+	filter["_id"] = id
+
+	form := new(postForm)
+	if err := ctx.Bind(form); err != nil {
+		return ctx.JSON(400, echo.Map{"error": err.Error()})
+	}
+
+	p, err := post.FindOne(filter)
+	if err != nil {
+		return ctx.JSON(404, echo.Map{"error": err.Error()})
+	}
+
+	p.Title = form.Title
+	p.Description = form.Description
+	p.Tags = form.Tags
+	p.Thumbnail = form.Thumbnail
+
+	if err := p.Save(); err != nil {
+		return ctx.JSON(500, echo.Map{"error": err.Error()})
+	}
+
+	return ctx.JSON(200, echo.Map{
+		"message": "post updated successfully",
 		"post":    postToJSON(*p),
 	})
 }
