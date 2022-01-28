@@ -16,3 +16,6 @@
 
 # Config JSON File
 config.json
+
+build/
+docs/
