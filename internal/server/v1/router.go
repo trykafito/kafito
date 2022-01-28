@@ -29,6 +29,7 @@ func Register(e *echo.Echo, sk string) {
 	currentUserGroup.GET("", getCurrentUser)
 
 	productGroup := r.Group("products")
+	productGroup.GET("", listProducts)
 	productGroup.POST("", addProduct)
 	productGroup.GET("/:id", getProduct)
 	productGroup.PUT("/:id", editProduct)
