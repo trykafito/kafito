@@ -1,6 +1,8 @@
 package v1
 
 import (
+	"strconv"
+
 	"github.com/labstack/echo"
 	"github.com/trykafito/kafito/internal/post"
 	"github.com/trykafito/kafito/internal/user"
@@ -101,5 +103,34 @@ func getPost(ctx echo.Context) error {
 
 	return ctx.JSON(200, echo.Map{
 		"post": postToJSON(*p),
+	})
+}
+
+func listPosts(ctx echo.Context) error {
+	filter := bson.M{}
+
+	page, _ := strconv.Atoi(ctx.QueryParam("page"))
+	limit, _ := strconv.Atoi(ctx.QueryParam("limit"))
+
+	if q := ctx.QueryParam("q"); q != "" {
+		filter["title"] = bson.M{"$regex": q, "$options": "i"}
+	}
+
+	posts, err := post.Find(filter, page, limit, ctx.Get("sort").(bson.D)...)
+	if err != nil {
+		return ctx.JSON(404, echo.Map{"error": err.Error()})
+	}
+
+	count := post.Count(filter)
+
+	result := []M{}
+	for _, p := range posts {
+		result = append(result, postToJSON(p))
+	}
+
+	return ctx.JSON(200, echo.Map{
+		"posts":       result,
+		"page":        page,
+		"total_count": count,
 	})
 }
