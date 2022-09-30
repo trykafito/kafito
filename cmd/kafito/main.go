@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/trykafito/kafito/config"
 	"github.com/trykafito/kafito/internal/server"
@@ -22,6 +23,14 @@ func main() {
 	if err := database.Connect(c.Mongo.Host, c.Mongo.DB, c.Mongo.User, c.Mongo.Password); err != nil {
 		logger.Panic(err)
 	}
+
+	fmt.Println(`
+ _  __      __ _ _        
+| |/ /__ _ / _(_) |_ ___  
+| ' // _' | |_| | __/ _ \ 
+|   \ (_| |  _| | || (_) |
+|_|\_\__,_|_| |_|\__\___/ 
+	`)
 
 	if err := server.Start(c.Port, c.SecretKey); err != nil {
 		logger.Panic(err)
